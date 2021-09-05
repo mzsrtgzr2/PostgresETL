@@ -21,14 +21,14 @@ _CREATE_FORMAT = 'CREATE TABLE IF NOT EXISTS {} ({});'
 
 songplay_table_create = _CREATE_FORMAT.format(
     SONGPLAYS,
-    'songplay_id varchar SERIAL NOT NULL, '
+    'songplay_id SERIAL, '
     'start_time timestamp NOT NULL, '
     'user_id varchar NOT NULL, '
     'level varchar, '
-    'song_id varchar NOT NULL, '
-    'artist_id varchar NOT NULL, '
+    'song_id varchar, '
+    'artist_id varchar, '
     'session_id varchar NOT NULL, '
-    'location varchar, user_agent varchar '
+    'location varchar, user_agent varchar, '
     'PRIMARY KEY (songplay_id)'
 )
 
@@ -38,28 +38,28 @@ user_table_create = _CREATE_FORMAT.format(
     'first_name varchar NOT NULL, '
     'last_name varchar NOT NULL, '
     'gender char, '
-    'level varchar'
+    'level varchar, '
     'PRIMARY KEY (user_id)'
 )
 
 song_table_create = _CREATE_FORMAT.format(
     SONGS,
     'song_id varchar NOT NULL, title varchar NOT NULL, '
-    'artist_id varchar NOT NULL, year int, duration float'
+    'artist_id varchar NOT NULL, year int, duration float, '
     'PRIMARY KEY (song_id)'
 )
 
 artist_table_create = _CREATE_FORMAT.format(
     ARTISTS,
     'artist_id varchar NOT NULL, name varchar NOT NULL, '
-    'location varchar, latitude float, longitude float'
+    'location varchar, latitude float, longitude float, '
     'PRIMARY KEY (artist_id)'
 )
 
 time_table_create = _CREATE_FORMAT.format(
     TIMES,
     'start_time timestamp NOT NULL, hour int, day int , '
-    'week int, month int, year int, weekday int'
+    'week int, month int, year int, weekday int, '
     'PRIMARY KEY (start_time)'
 )
 
@@ -95,9 +95,9 @@ artist_table_insert = _INSERT_FORMAT.format(
     ARTISTS,
     'artist_id, name, location, latitude, longitude',
     ','.join(['%s'] * 5),
-    '(artist_id) DO UPDATE SET location = EXCLUDED.location and ',
-    'latitude = EXCLUDED.latitude and '
-    'longitude = EXCLUDED.longitude',  # conflict behaviour
+    '(artist_id) DO UPDATE SET location = EXCLUDED.location ',
+    'SET latitude = EXCLUDED.latitude '
+    'SET longitude = EXCLUDED.longitude',  # conflict behaviour
 )
 
 time_table_insert = _INSERT_FORMAT.format(

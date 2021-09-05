@@ -2,6 +2,7 @@ import os
 import glob
 import psycopg2
 import pandas as pd
+from datetime import datetime
 from sql_queries import *
 
 from consts import (
@@ -9,13 +10,13 @@ from consts import (
 
 
 def process_song_file(cur, filepath):
-     """
-        This function reads JSON files and read information of song
-        and artist data and saves into song_data and artist_data
-        Arguments:
-        cur: Database Cursor
-        filepath: location of JSON files
-        Return: None
+    """
+    This function reads JSON files and read information of song
+    and artist data and saves into song_data and artist_data
+    Arguments:
+    cur: Database Cursor
+    filepath: location of JSON files
+    Return: None
     """
     # open song file
     df = pd.read_json(filepath, lines=True)
@@ -34,12 +35,12 @@ def process_song_file(cur, filepath):
 
 def process_log_file(cur, filepath):
     """
-        This function reads Log files and reads information of time, 
-        user and songplay data and saves into time, user, songplay
-        Arguments:
-        cur: Database Cursor
-        filepath: location of Log files
-        Return: None
+    This function reads Log files and reads information of time, 
+    user and songplay data and saves into time, user, songplay
+    Arguments:
+    cur: Database Cursor
+    filepath: location of Log files
+    Return: None
     """
     # open log file
     df = pd.read_json(filepath, lines=True)
@@ -51,8 +52,8 @@ def process_log_file(cur, filepath):
     t = pd.to_datetime(df['ts'], unit='ms')
     
     # insert time data records
-    time_data = zip(t.dt.to_pydatetime(), t.dt.hour.values, t.dt.day.values, t.dt.weekofyear.values, t.dt.month.values, t.dt.year.values, t.dt.weekday.values)
-    column_labels = ('timestamp,hour,day,week_of_year,month,year,weekday'.split(','))
+    time_data = zip(t, t.dt.hour.values, t.dt.day.values, t.dt.weekofyear.values, t.dt.month.values, t.dt.year.values, t.dt.weekday.values)
+    column_labels = ('start_time,hour,day,week_of_year,month,year,weekday'.split(','))
     
     time_df = pd.DataFrame(time_data, columns=column_labels)
 
@@ -80,8 +81,9 @@ def process_log_file(cur, filepath):
 
         # insert songplay record
         songplay_data = (
-            row.ts, row.userId, 
-            row.level, songid, artistid, row.sessionId, row.location, row.userAgent
+            datetime.fromtimestamp(row.ts/1000), row.userId, 
+            row.level, songid, artistid, 
+            row.sessionId, row.location, row.userAgent
         ) 
         cur.execute(songplay_table_insert, songplay_data)
 
