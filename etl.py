@@ -10,7 +10,7 @@ from consts import (
 
 def process_song_file(cur, filepath):
      """
-        This function reads JSON files and read information of song 
+        This function reads JSON files and read information of song
         and artist data and saves into song_data and artist_data
         Arguments:
         cur: Database Cursor

@@ -73,7 +73,7 @@ songplay_table_insert = _INSERT_FORMAT.format(
     SONGPLAYS,
     'start_time, user_id, level, song_id, artist_id, session_id, location, user_agent',
     ','.join(['%s'] * 8),
-    'DO NOTHING', # conflict behaviour
+    'DO NOTHING',  # conflict behaviour
 
 )
 
@@ -81,14 +81,14 @@ user_table_insert = _INSERT_FORMAT.format(
     USERS,
     'user_id, first_name, last_name, gender, level',
     ','.join(['%s'] * 5),
-    '(user_id) DO UPDATE SET level = EXCLUDED.level', # conflict behaviour
+    '(user_id) DO UPDATE SET level = EXCLUDED.level',  # conflict behaviour
 )
 
 song_table_insert = _INSERT_FORMAT.format(
     SONGS,
     'song_id, title, artist_id, year, duration',
     ','.join(['%s'] * 5),
-    '(song_id) DO UPDATE SET title = EXCLUDED.title', # conflict behaviour
+    '(song_id) DO UPDATE SET title = EXCLUDED.title',  # conflict behaviour
 )
 
 artist_table_insert = _INSERT_FORMAT.format(
@@ -97,25 +97,35 @@ artist_table_insert = _INSERT_FORMAT.format(
     ','.join(['%s'] * 5),
     '(artist_id) DO UPDATE SET location = EXCLUDED.location and ',
     'latitude = EXCLUDED.latitude and '
-    'longitude = EXCLUDED.longitude', # conflict behaviour
+    'longitude = EXCLUDED.longitude',  # conflict behaviour
 )
 
 time_table_insert = _INSERT_FORMAT.format(
     TIMES,
     'start_time, hour, day, week, month, year, weekday',
     ','.join(['%s'] * 7),
-    'DO NOTHING', # conflict behaviour
+    'DO NOTHING',  # conflict behaviour
 )
 
 # FIND SONGS
 
 song_select = (f"""
-SELECT song_id, {ARTISTS}.artist_id 
-FROM {SONGS} JOIN {ARTISTS} on ({SONGS}.artist_id={ARTISTS}.artist_id) 
+SELECT song_id, {ARTISTS}.artist_id
+FROM {SONGS} JOIN {ARTISTS} on ({SONGS}.artist_id={ARTISTS}.artist_id)
 WHERE title=%s and name=%s and duration=%s
 """)
 
 # QUERY LISTS
 
-create_table_queries = [songplay_table_create, user_table_create, song_table_create, artist_table_create, time_table_create]
-drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
+create_table_queries = [
+    songplay_table_create,
+    user_table_create,
+    song_table_create,
+    artist_table_create,
+    time_table_create]
+drop_table_queries = [
+    songplay_table_drop,
+    user_table_drop,
+    song_table_drop,
+    artist_table_drop,
+    time_table_drop]
