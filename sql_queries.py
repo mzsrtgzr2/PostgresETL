@@ -21,27 +21,46 @@ _CREATE_FORMAT = 'CREATE TABLE IF NOT EXISTS {} ({});'
 
 songplay_table_create = _CREATE_FORMAT.format(
     SONGPLAYS,
-    'songplay_id text, start_time text, user_id text, level text, song_id text, artist_id text, session_id text, location text, user_agent text'
+    'songplay_id varchar SERIAL NOT NULL, '
+    'start_time timestamp NOT NULL, '
+    'user_id varchar NOT NULL, '
+    'level varchar, '
+    'song_id varchar NOT NULL, '
+    'artist_id varchar NOT NULL, '
+    'session_id varchar NOT NULL, '
+    'location varchar, user_agent varchar '
+    'PRIMARY KEY (songplay_id)'
 )
 
 user_table_create = _CREATE_FORMAT.format(
     USERS,
-    'user_id text, first_name text, last_name text, gender text, level text'
+    'user_id varchar NOT NULL, '
+    'first_name varchar NOT NULL, '
+    'last_name varchar NOT NULL, '
+    'gender char, '
+    'level varchar'
+    'PRIMARY KEY (user_id)'
 )
 
 song_table_create = _CREATE_FORMAT.format(
     SONGS,
-    'song_id text, title text, artist_id text, year int, duration float'
+    'song_id varchar NOT NULL, title varchar NOT NULL, '
+    'artist_id varchar NOT NULL, year int, duration float'
+    'PRIMARY KEY (song_id)'
 )
 
 artist_table_create = _CREATE_FORMAT.format(
     ARTISTS,
-    'artist_id text, name text, location text, latitude text, longitude text'
+    'artist_id varchar NOT NULL, name varchar NOT NULL, '
+    'location varchar, latitude float, longitude float'
+    'PRIMARY KEY (artist_id)'
 )
 
 time_table_create = _CREATE_FORMAT.format(
     TIMES,
-    'start_time text, hour int, day int , week int, month int, year int, weekday int'
+    'start_time timestamp NOT NULL, hour int, day int , '
+    'week int, month int, year int, weekday int'
+    'PRIMARY KEY (start_time)'
 )
 
 # INSERT RECORDS
@@ -50,8 +69,8 @@ _INSERT_FORMAT = 'INSERT INTO {} ({}) VALUES ({})'
 
 songplay_table_insert = _INSERT_FORMAT.format(
     SONGPLAYS,
-    'songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent',
-    ','.join(['%s'] * 9)
+    'start_time, user_id, level, song_id, artist_id, session_id, location, user_agent',
+    ','.join(['%s'] * 8)
 )
 
 user_table_insert = _INSERT_FORMAT.format(
