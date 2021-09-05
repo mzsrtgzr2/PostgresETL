@@ -65,36 +65,46 @@ time_table_create = _CREATE_FORMAT.format(
 
 # INSERT RECORDS
 
-_INSERT_FORMAT = 'INSERT INTO {} ({}) VALUES ({})'
+_INSERT_FORMAT = (
+    'INSERT INTO {} ({}) VALUES ({}) '
+    'ON CONFLICT {}')
 
 songplay_table_insert = _INSERT_FORMAT.format(
     SONGPLAYS,
     'start_time, user_id, level, song_id, artist_id, session_id, location, user_agent',
-    ','.join(['%s'] * 8)
+    ','.join(['%s'] * 8),
+    'DO NOTHING', # conflict behaviour
+
 )
 
 user_table_insert = _INSERT_FORMAT.format(
     USERS,
     'user_id, first_name, last_name, gender, level',
-    ','.join(['%s'] * 5)
+    ','.join(['%s'] * 5),
+    '(user_id) DO UPDATE SET level = EXCLUDED.level', # conflict behaviour
 )
 
 song_table_insert = _INSERT_FORMAT.format(
     SONGS,
     'song_id, title, artist_id, year, duration',
-    ','.join(['%s'] * 5)
+    ','.join(['%s'] * 5),
+    '(song_id) DO UPDATE SET title = EXCLUDED.title', # conflict behaviour
 )
 
 artist_table_insert = _INSERT_FORMAT.format(
     ARTISTS,
     'artist_id, name, location, latitude, longitude',
-    ','.join(['%s'] * 5)
+    ','.join(['%s'] * 5),
+    '(artist_id) DO UPDATE SET location = EXCLUDED.location and ',
+    'latitude = EXCLUDED.latitude and '
+    'longitude = EXCLUDED.longitude', # conflict behaviour
 )
 
 time_table_insert = _INSERT_FORMAT.format(
     TIMES,
     'start_time, hour, day, week, month, year, weekday',
-    ','.join(['%s'] * 7)
+    ','.join(['%s'] * 7),
+    'DO NOTHING', # conflict behaviour
 )
 
 # FIND SONGS
