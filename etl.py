@@ -9,6 +9,14 @@ from consts import (
 
 
 def process_song_file(cur, filepath):
+     """
+        This function reads JSON files and read information of song 
+        and artist data and saves into song_data and artist_data
+        Arguments:
+        cur: Database Cursor
+        filepath: location of JSON files
+        Return: None
+    """
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -18,11 +26,21 @@ def process_song_file(cur, filepath):
     print(song_data)
     
     # insert artist record
-    artist_data = df[['artist_id', 'artist_name', 'artist_location', 'artist_latitude', 'artist_longitude']].values[0]
+    artist_data = df[[
+        'artist_id', 'artist_name', 'artist_location', 'artist_latitude', 
+        'artist_longitude']].values[0]
     cur.execute(artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
+    """
+        This function reads Log files and reads information of time, 
+        user and songplay data and saves into time, user, songplay
+        Arguments:
+        cur: Database Cursor
+        filepath: location of Log files
+        Return: None
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
