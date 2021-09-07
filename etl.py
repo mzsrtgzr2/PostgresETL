@@ -52,7 +52,13 @@ def process_log_file(cur, filepath):
     t = pd.to_datetime(df['ts'], unit='ms')
     
     # insert time data records
-    time_data = zip(t, t.dt.hour.values, t.dt.day.values, t.dt.weekofyear.values, t.dt.month.values, t.dt.year.values, t.dt.weekday.values)
+    time_data = tuple(
+        zip(
+            t, t.dt.hour.values, 
+            t.dt.day.values, t.dt.weekofyear.values, 
+            t.dt.month.values, t.dt.year.values, 
+            t.dt.weekday.values)
+    )
     column_labels = ('start_time,hour,day,week_of_year,month,year,weekday'.split(','))
     
     time_df = pd.DataFrame(time_data, columns=column_labels)
